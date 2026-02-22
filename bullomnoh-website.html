@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BULLOMNOH — Human Resource Management Job Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #07111F;
+    --navy-mid: #0D1E35;
+    --navy-card: #112645;
+    --navy-border: #1C3455;
+    --gold: #C8A35A;
+    --gold-light: #E2C07E;
+    --gold-dim: rgba(200, 163, 90, 0.15);
+    --white: #FFFFFF;
+    --off-white: #EDF1F7;
+    --text-muted: #7A8FA6;
+    --text-body: #B8C8D8;
+    --success: #2ECC8A;
+    --danger: #E05C5C;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.4);
+    --shadow-gold: 0 0 40px rgba(200, 163, 90, 0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy-deep);
+    color: var(--text-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* TYPOGRAPHY */
+  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: var(--white); line-height: 1.2; }
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px;
+    height: 80px;
+    background: rgba(7, 17, 31, 0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--navy-border);
+    animation: slideDown 0.6s ease both;
+  }
+
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px; text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  .logo-icon::before {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border: 2px solid var(--navy-deep);
+    border-radius: 50%;
+    top: 6px; left: 6px;
+  }
+
+  .logo-icon::after {
+    content: '';
+    position: absolute;
+    width: 28px; height: 3px;
+    background: var(--navy-deep);
+    border-radius: 2px;
+    bottom: 10px; left: 8px;
+    box-shadow: 0 -6px 0 var(--navy-deep);
+  }
+
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--white); letter-spacing: 2px;
+  }
+
+  .logo-text span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 36px; list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-body);
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-actions { display: flex; gap: 12px; align-items: center; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px; border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none; cursor: pointer;
+    border: none; transition: all 0.25s; letter-spacing: 0.3px;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-body);
+    border: 1px solid var(--navy-border);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy-deep);
+    box-shadow: 0 4px 20px rgba(200, 163, 90, 0.25);
+  }
+  .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(200, 163, 90, 0.4); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+  .btn-outline:hover { background: var(--gold-dim); }
+
+  .btn-lg { padding: 16px 36px; font-size: 15px; border-radius: var(--radius-md); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 120px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(200, 163, 90, 0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 80% at 80% 50%, rgba(17, 38, 69, 0.8) 0%, transparent 70%),
+      linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(200,163,90,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,163,90,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,163,90,0.08) 0%, transparent 70%);
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(13,30,53,0.6) 0%, transparent 70%);
+    bottom: 0; right: -100px;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 860px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 18px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(200, 163, 90, 0.3);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+
+  .hero h1 {
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 300;
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s 0.3s ease both;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  .hero h1 strong {
+    font-weight: 600;
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 18px; font-weight: 300;
+    color: var(--text-muted);
+    max-width: 560px; margin: 0 auto 48px;
+    line-height: 1.7;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.5s ease both;
+    margin-bottom: 72px;
+  }
+
+  @keyframes fadeUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .hero-stats {
+    display: flex; gap: 60px; justify-content: center;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-number span { color: var(--gold); }
+
+  .stat-label {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--text-muted); margin-top: 6px;
+  }
+
+  .stat-divider { width: 1px; background: var(--navy-border); }
+
+  /* SEARCH BAR */
+  .search-section {
+    padding: 0 60px 80px;
+    position: relative; z-index: 2;
+  }
+
+  .search-container {
+    max-width: 900px; margin: 0 auto;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+    display: flex; gap: 8px; align-items: center;
+    box-shadow: var(--shadow), var(--shadow-gold);
+    animation: fadeUp 0.8s 0.7s ease both;
+  }
+
+  .search-field {
+    flex: 1; display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    border-right: 1px solid var(--navy-border);
+  }
+
+  .search-field:last-of-type { border-right: none; }
+
+  .search-field svg { color: var(--gold); flex-shrink: 0; }
+
+  .search-field input, .search-field select {
+    background: transparent; border: none; outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--white);
+    width: 100%;
+  }
+
+  .search-field select option { background: var(--navy-mid); }
+
+  .search-field input::placeholder { color: var(--text-muted); }
+
+  /* SECTIONS */
+  section { padding: 100px 60px; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .section-label::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--gold);
+  }
+
+  .section-title {
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300; margin-bottom: 20px;
+  }
+
+  .section-title strong { font-weight: 600; }
+
+  .section-desc {
+    font-size: 16px; color: var(--text-muted);
+    max-width: 560px; line-height: 1.8;
+  }
+
+  .section-header { margin-bottom: 64px; }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* JOB CARDS */
+  .jobs-section { background: var(--navy-mid); }
+
+  .jobs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .job-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+
+  .job-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .job-card:hover { border-color: rgba(200,163,90,0.3); transform: translateY(-4px); box-shadow: var(--shadow), var(--shadow-gold); }
+  .job-card:hover::before { transform: scaleX(1); }
+
+  .job-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .company-logo {
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, var(--navy-deep), var(--navy-border));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 700; color: var(--gold);
+    border: 1px solid var(--navy-border);
+  }
+
+  .job-badge {
+    font-size: 11px; font-weight: 600;
+    padding: 4px 12px; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .badge-new { background: rgba(46,204,138,0.15); color: var(--success); }
+  .badge-hot { background: rgba(200,163,90,0.15); color: var(--gold); }
+  .badge-remote { background: rgba(100,150,255,0.15); color: #6496FF; }
+
+  .job-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; color: var(--white);
+    margin-bottom: 6px; line-height: 1.3;
+  }
+
+  .job-company { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+
+  .job-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+
+  .job-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  .job-meta-item svg { color: var(--gold); opacity: 0.7; }
+
+  .job-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 20px; border-top: 1px solid var(--navy-border);
+  }
+
+  .job-salary {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600; color: var(--gold);
+  }
+
+  .job-salary small { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+  .apply-btn {
+    font-size: 12px; font-weight: 600;
+    padding: 8px 18px; border-radius: var(--radius-sm);
+    background: var(--gold-dim); color: var(--gold);
+    border: 1px solid rgba(200,163,90,0.3);
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+  }
+
+  .apply-btn:hover { background: var(--gold); color: var(--navy-deep); }
+
+  /* FEATURES / HOW IT WORKS */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+
+  .feature-card {
+    padding: 40px 36px;
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-lg);
+    position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .feature-card:hover { border-color: rgba(200,163,90,0.25); }
+
+  .feature-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 700;
+    color: rgba(200,163,90,0.08);
+    position: absolute; top: 16px; right: 24px;
+    line-height: 1; pointer-events: none;
+  }
+
+  .feature-icon {
+    width: 52px; height: 52px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(200,163,90,0.2);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    color: var(--gold);
+  }
+
+  .feature-card h3 {
+    font-size: 22px; font-weight: 600; margin-bottom: 14px;
+  }
+
+  .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
+
+  /* CATEGORIES */
+  .categories-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+
+  .category-card {
+    padding: 28px 24px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-md);
+    text-align: center; cursor: pointer;
+    transition: all 0.3s; text-decoration: none;
+  }
+
+  .category-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+  .category-icon {
+    font-size: 32px; margin-bottom: 14px; display: block;
+  }
+
+  .category-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600; color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .category-count { font-size: 12px; color: var(--text-muted); }
+
+  /* ABOUT SECTION */
+  .about-section {
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
+  }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  .about-visual {
+    position: relative; height: 480px;
+  }
+
+  .about-card-main {
+    position: absolute;
+    width: 300px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    top: 0; left: 0;
+    box-shadow: var(--shadow);
+  }
+
+  .about-card-stats {
+    position: absolute;
+    width: 220px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: var(--radius-md);
+    padding: 28px;
+    bottom: 40px; right: 0;
+    box-shadow: 0 20px 60px rgba(200,163,90,0.3);
+  }
+
+  .about-card-stats h3 {
+    color: var(--navy-deep);
+    font-size: 40px; font-weight: 700;
+  }
+
+  .about-card-stats p { color: var(--navy-mid); font-size: 13px; font-weight: 500; }
+
+  .profile-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .profile-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    background: var(--navy-mid);
+    border-radius: var(--radius-sm);
+  }
+
+  .profile-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--navy-deep);
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .profile-info { flex: 1; }
+  .profile-name { font-size: 13px; font-weight: 500; color: var(--white); }
+  .profile-role { font-size: 11px; color: var(--text-muted); }
+
+  .profile-status {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+  }
+
+  .about-text .section-desc { max-width: 100%; }
+
+  .about-features { display: flex; flex-direction: column; gap: 20px; margin-top: 40px; }
+
+  .about-feature-item { display: flex; align-items: flex-start; gap: 18px; }
+
+  .afi-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--gold-dim);
+    border: 1px solid rgba(200,163,90,0.2);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); margin-top: 2px;
+  }
+
+  .afi-text h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--white); }
+  .afi-text p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+  /* CONTACT */
+  .contact-section { background: var(--navy-mid); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+
+  .contact-info { display: flex; flex-direction: column; gap: 32px; margin-top: 40px; }
+
+  .contact-item { display: flex; align-items: flex-start; gap: 20px; }
+
+  .contact-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: var(--gold-dim);
+    border: 1px solid rgba(200,163,90,0.2);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+  }
+
+  .contact-item h4 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .contact-item p, .contact-item a {
+    font-size: 14px; color: var(--text-muted); line-height: 1.6;
+    text-decoration: none;
+  }
+  .contact-item a:hover { color: var(--gold); }
+
+  .contact-form {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--white);
+    transition: border-color 0.2s; outline: none;
+  }
+
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--text-muted); }
+
+  textarea.form-input { resize: vertical; min-height: 120px; }
+
+  select.form-input option { background: var(--navy-mid); }
+
+  /* EMPLOYER BANNER */
+  .cta-banner {
+    margin: 0 60px;
+    background: linear-gradient(135deg, rgba(200,163,90,0.12), rgba(200,163,90,0.04));
+    border: 1px solid rgba(200,163,90,0.25);
+    border-radius: var(--radius-lg);
+    padding: 64px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 40px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: ''; position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,163,90,0.1) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .cta-banner h2 { font-size: 42px; font-weight: 300; margin-bottom: 12px; }
+  .cta-banner h2 strong { font-weight: 700; display: block; color: var(--gold); }
+  .cta-banner p { font-size: 15px; color: var(--text-muted); max-width: 500px; line-height: 1.7; }
+
+  .cta-actions { display: flex; flex-direction: column; gap: 12px; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .testimonial-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-md);
+    padding: 36px;
+    transition: all 0.3s;
+  }
+
+  .testimonial-card:hover { border-color: rgba(200,163,90,0.2); }
+
+  .testimonial-stars { color: var(--gold); font-size: 14px; margin-bottom: 20px; letter-spacing: 2px; }
+
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--off-white); line-height: 1.6; margin-bottom: 28px;
+  }
+
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .t-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 700; color: var(--navy-deep);
+  }
+
+  .t-name { font-size: 14px; font-weight: 600; color: var(--white); }
+  .t-role { font-size: 12px; color: var(--text-muted); }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy-deep);
+    border-top: 1px solid var(--navy-border);
+    padding: 80px 60px 40px;
+  }
+
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+
+  .footer-brand p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin: 20px 0; max-width: 300px; }
+
+  .footer-contact-mini { display: flex; flex-direction: column; gap: 8px; }
+
+  .footer-contact-mini a {
+    font-size: 13px; color: var(--text-muted);
+    text-decoration: none; transition: color 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .footer-contact-mini a:hover { color: var(--gold); }
+
+  .footer-col h4 {
+    font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--white); margin-bottom: 24px;
+  }
+
+  .footer-links { display: flex; flex-direction: column; gap: 12px; }
+
+  .footer-links a {
+    font-size: 14px; color: var(--text-muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    padding-top: 40px; border-top: 1px solid var(--navy-border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-bottom p { font-size: 13px; color: var(--text-muted); }
+
+  .footer-legal { display: flex; gap: 24px; }
+
+  .footer-legal a { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+  .footer-legal a:hover { color: var(--gold); }
+
+  /* TABS */
+  .tabs { display: flex; gap: 8px; margin-bottom: 40px; }
+
+  .tab {
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: var(--navy-card);
+    color: var(--text-muted);
+    border: 1px solid var(--navy-border);
+  }
+
+  .tab.active { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
+  .tab:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--navy-border); margin: 0 60px; }
+
+  /* EMPLOYER SECTION */
+  .employer-section { background: var(--navy-deep); }
+
+  .employer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .employer-dashboard {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .dashboard-header {
+    background: var(--navy-mid);
+    padding: 20px 28px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--navy-border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red { background: #E05C5C; }
+  .dot-yellow { background: var(--gold); }
+  .dot-green { background: var(--success); }
+
+  .dashboard-title { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-left: 8px; }
+
+  .dashboard-body { padding: 28px; }
+
+  .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+
+  .dash-stat {
+    background: var(--navy-mid);
+    border-radius: var(--radius-sm);
+    padding: 20px 16px; text-align: center;
+  }
+
+  .dash-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 600; color: var(--white);
+    line-height: 1;
+  }
+
+  .dash-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+
+  .dash-table { width: 100%; border-collapse: collapse; }
+
+  .dash-table th {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted); padding: 0 0 14px;
+    text-align: left; border-bottom: 1px solid var(--navy-border);
+  }
+
+  .dash-table td { padding: 14px 0; border-bottom: 1px solid rgba(28,52,85,0.5); font-size: 13px; }
+
+  .status-pill {
+    display: inline-flex; padding: 3px 10px;
+    border-radius: 100px; font-size: 11px; font-weight: 600;
+  }
+
+  .pill-review { background: rgba(200,163,90,0.15); color: var(--gold); }
+  .pill-shortlisted { background: rgba(46,204,138,0.15); color: var(--success); }
+  .pill-applied { background: rgba(100,150,255,0.15); color: #6496FF; }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .service-card {
+    padding: 36px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: var(--radius-md);
+    position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .service-card:hover { border-color: rgba(200,163,90,0.3); transform: translateY(-4px); }
+
+  .service-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px; display: block;
+  }
+
+  .service-card h3 { font-size: 22px; margin-bottom: 14px; }
+  .service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px; }
+
+  .service-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--gold);
+    text-decoration: none; transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 14px; }
+
+  /* MOBILE */
+  @media (max-width: 1024px) {
+    nav { padding: 0 30px; }
+    .nav-links { display: none; }
+    section { padding: 80px 30px; }
+    .hero { padding: 120px 30px 80px; }
+    .search-section, .cta-banner { padding: 0 30px 60px; }
+    .divider { margin: 0 30px; }
+    footer { padding: 60px 30px 40px; }
+    .jobs-grid, .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-grid, .contact-grid, .employer-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .hero-stats { gap: 30px; }
+    .stat-divider { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .cta-banner { grid-template-columns: 1fr; margin: 0 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon"></div>
+    <span class="logo-text">BULLOMNOH</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#jobs">Find Jobs</a></li>
+    <li><a href="#employers">For Employers</a></li>
+    <li><a href="#services">HR Services</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-ghost">Sign In</a>
+    <a href="#" class="btn btn-gold">Post a Job</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Sierra Leone's Premier HR Job Board Platform
+    </div>
+
+    <h1>
+      Where <em>Talent</em> Meets
+      <strong>Opportunity</strong>
+    </h1>
+
+    <p class="hero-sub">
+      BULLOMNOH connects exceptional professionals with forward-thinking employers across Sierra Leone and the wider West African labour market — powering workforce transformation through intelligent recruitment solutions.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#jobs" class="btn btn-gold btn-lg">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Explore Opportunities
+      </a>
+      <a href="#" class="btn btn-outline btn-lg">Upload Your CV</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">2<span>,</span>400<span>+</span></div>
+        <div class="stat-label">Active Vacancies</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-number">850<span>+</span></div>
+        <div class="stat-label">Registered Employers</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-number">12<span>K+</span></div>
+        <div class="stat-label">Qualified Candidates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<div class="search-section">
+  <div class="search-container">
+    <div class="search-field" style="flex:2">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Job title, keyword, or company…">
+    </div>
+    <div class="search-field">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <input type="text" placeholder="Location…">
+    </div>
+    <div class="search-field">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <select>
+        <option>All Sectors</option>
+        <option>Finance & Banking</option>
+        <option>Technology & IT</option>
+        <option>Healthcare</option>
+        <option>Engineering</option>
+        <option>Education</option>
+        <option>NGO & Development</option>
+        <option>Government & Public Sector</option>
+      </select>
+    </div>
+    <button class="btn btn-gold" style="white-space:nowrap;padding:14px 28px;border-radius:10px;">Search Jobs</button>
+  </div>
+</div>
+
+<!-- JOB CATEGORIES -->
+<section id="jobs">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Browse by Category</div>
+      <h2 class="section-title">Explore <strong>Top Sectors</strong></h2>
+      <p class="section-desc">Discover opportunities across Sierra Leone's most active employment sectors, curated by our HR specialists.</p>
+    </div>
+
+    <div class="categories-grid">
+      <a href="#" class="category-card">
+        <span class="category-icon">🏦</span>
+        <div class="category-name">Finance & Banking</div>
+        <div class="category-count">286 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">💻</span>
+        <div class="category-name">Technology & IT</div>
+        <div class="category-count">412 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">🏥</span>
+        <div class="category-name">Healthcare & Medical</div>
+        <div class="category-count">194 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">⚙️</span>
+        <div class="category-name">Engineering</div>
+        <div class="category-count">231 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">🌍</span>
+        <div class="category-name">NGO & Development</div>
+        <div class="category-count">178 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">📚</span>
+        <div class="category-name">Education</div>
+        <div class="category-count">143 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">🏛️</span>
+        <div class="category-name">Government & Public</div>
+        <div class="category-count">97 open roles</div>
+      </a>
+      <a href="#" class="category-card">
+        <span class="category-icon">📊</span>
+        <div class="category-name">Management & Admin</div>
+        <div class="category-count">321 open roles</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURED JOBS -->
+<section class="jobs-section" id="featured-jobs">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;">
+      <div>
+        <div class="section-label">Latest Listings</div>
+        <h2 class="section-title">Featured <strong>Vacancies</strong></h2>
+      </div>
+      <a href="#" class="btn btn-outline">View All Jobs →</a>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active">All Jobs</button>
+      <button class="tab">Full-Time</button>
+      <button class="tab">Part-Time</button>
+      <button class="tab">Contract</button>
+      <button class="tab">Remote</button>
+    </div>
+
+    <div class="jobs-grid">
+      <!-- Job Card 1 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">AB</div>
+          <span class="job-badge badge-hot">🔥 Hot</span>
+        </div>
+        <div class="job-title">Senior HR Business Partner</div>
+        <div class="job-company">Afriland Bank SL · Freetown</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Freetown, SL
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Full-Time
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            5+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 4,200 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- Job Card 2 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">TC</div>
+          <span class="job-badge badge-new">✦ New</span>
+        </div>
+        <div class="job-title">Talent Acquisition Specialist</div>
+        <div class="job-company">TechConnect SL · Hybrid</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Freetown, SL
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Full-Time
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            3+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 2,800 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- Job Card 3 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">WG</div>
+          <span class="job-badge badge-remote">⊕ Remote</span>
+        </div>
+        <div class="job-title">Workforce Planning Analyst</div>
+        <div class="job-company">WestGroup Consulting · Remote</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Remote
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Contract
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            2+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 3,100 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- Job Card 4 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">UH</div>
+          <span class="job-badge badge-new">✦ New</span>
+        </div>
+        <div class="job-title">Employee Relations Manager</div>
+        <div class="job-company">United Healthcare SL · Freetown</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Freetown, SL
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Full-Time
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            6+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 5,000 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- Job Card 5 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">FD</div>
+          <span class="job-badge badge-hot">🔥 Urgent</span>
+        </div>
+        <div class="job-title">Learning & Development Officer</div>
+        <div class="job-company">ForesDev Foundation · Freetown</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Freetown, SL
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Full-Time
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            4+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 3,600 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+
+      <!-- Job Card 6 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo">PR</div>
+          <span class="job-badge badge-remote">⊕ Hybrid</span>
+        </div>
+        <div class="job-title">Compensation & Benefits Manager</div>
+        <div class="job-company">ProsperityBank · Bo City</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Bo City, SL
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Full-Time
+          </div>
+          <div class="job-meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            5+ yrs exp.
+          </div>
+        </div>
+        <div class="job-footer">
+          <div class="job-salary">NLE 4,800 <small>/month</small></div>
+          <a href="#" class="apply-btn">Apply Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <a href="#" class="btn btn-outline btn-lg">Load More Vacancies</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <div class="section-header" style="text-align:center;max-width:600px;margin:0 auto 64px;">
+      <div class="section-label" style="justify-content:center">How It Works</div>
+      <h2 class="section-title">Simple Steps to Your <strong>Next Role</strong></h2>
+      <p class="section-desc" style="margin:0 auto">Our streamlined recruitment journey connects talent with opportunity in three straightforward steps.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-number">01</div>
+        <div class="feature-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Create Your Profile</h3>
+        <p>Register as a candidate or employer. Build your professional profile, upload your CV, and set your career preferences — the entire process takes under five minutes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-number">02</div>
+        <div class="feature-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>Search & Match</h3>
+        <p>Use our advanced filters to find roles that align with your skills, sector, and salary expectations. Employers can search and shortlist qualified candidates instantly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-number">03</div>
+        <div class="feature-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        </div>
+        <h3>Apply & Get Hired</h3>
+        <p>Submit tailored applications, track your status in real-time, schedule interviews, and receive offer notifications — all within your BULLOMNOH dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT US -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-card-main">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Active Candidates</div>
+          <div class="profile-list">
+            <div class="profile-item">
+              <div class="profile-avatar">AK</div>
+              <div class="profile-info">
+                <div class="profile-name">Aminata Koroma</div>
+                <div class="profile-role">HR Business Partner · 6 yrs</div>
+              </div>
+              <div class="profile-status"></div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-avatar">MS</div>
+              <div class="profile-info">
+                <div class="profile-name">Mohamed Sesay</div>
+                <div class="profile-role">Talent Acquisition Lead · 4 yrs</div>
+              </div>
+              <div class="profile-status"></div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-avatar">FB</div>
+              <div class="profile-info">
+                <div class="profile-name">Fatmata Bangura</div>
+                <div class="profile-role">Workforce Analyst · 3 yrs</div>
+              </div>
+              <div class="profile-status"></div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-avatar">JC</div>
+              <div class="profile-info">
+                <div class="profile-name">Joseph Conteh</div>
+                <div class="profile-role">L&D Specialist · 5 yrs</div>
+              </div>
+              <div class="profile-status"></div>
+            </div>
+          </div>
+        </div>
+        <div class="about-card-stats">
+          <h3 style="font-family:'Cormorant Garamond',serif;">98%</h3>
+          <p>Employer Satisfaction Rate</p>
+          <div style="margin-top:12px;font-size:12px;color:rgba(7,17,31,0.7);">Based on post-placement surveys</div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <div class="section-label">About BULLOMNOH</div>
+        <h2 class="section-title">A Platform <strong>Built for People,</strong> Powered by Purpose</h2>
+
+        <p class="section-desc" style="margin-bottom:20px">
+          BULLOMNOH — which embodies the spirit of <em>Bringing Unified Labour, Livelihood, and Opportunity to Motivated and Nurtured Organisations and Households</em> — is Sierra Leone's dedicated Human Resource Management job board platform, headquartered at <strong style="color:var(--white)">3 Tigie Drive, Lumley Regent Road, Freetown</strong>.
+        </p>
+        <p class="section-desc">
+          We exist to close the gap between qualified talent and employment-ready organisations, facilitating meaningful workforce connections across every sector of the Sierra Leonean economy and the broader West African labour market.
+        </p>
+
+        <div class="about-features">
+          <div class="about-feature-item">
+            <div class="afi-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="afi-text">
+              <h4>Strategic Talent Acquisition</h4>
+              <p>We connect employers with pre-screened, sector-ready candidates through our intelligent matching engine and verified professional profiles.</p>
+            </div>
+          </div>
+          <div class="about-feature-item">
+            <div class="afi-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            </div>
+            <div class="afi-text">
+              <h4>Workforce Planning Intelligence</h4>
+              <p>Our employer dashboard provides real-time analytics on applicant flow, market salary benchmarks, and recruitment pipeline performance.</p>
+            </div>
+          </div>
+          <div class="about-feature-item">
+            <div class="afi-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="afi-text">
+              <h4>Compliant & Trusted Recruitment</h4>
+              <p>All postings are moderated against Sierra Leone labour laws. Every employer and candidate profile is verified for authenticity and compliance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPLOYER SECTION -->
+<section class="employer-section" id="employers">
+  <div class="container">
+    <div class="employer-grid">
+      <div>
+        <div class="section-label">For Employers</div>
+        <h2 class="section-title">Your Next <strong>Top Performer</strong> is Here</h2>
+        <p class="section-desc" style="margin-bottom:40px">
+          BULLOMNOH gives HR teams and hiring managers the tools they need to attract, evaluate, and onboard exceptional talent — faster, smarter, and with complete confidence.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px">
+          <div style="display:flex;align-items:center;gap:14px;font-size:14px;color:var(--text-body)">
+            <span style="color:var(--gold);font-size:18px">✓</span>
+            Post unlimited vacancies across all experience levels
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:14px;color:var(--text-body)">
+            <span style="color:var(--gold);font-size:18px">✓</span>
+            Access our Applicant Tracking System (ATS) for streamlined hiring
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:14px;color:var(--text-body)">
+            <span style="color:var(--gold);font-size:18px">✓</span>
+            Search and shortlist from 12,000+ verified candidate profiles
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:14px;color:var(--text-body)">
+            <span style="color:var(--gold);font-size:18px">✓</span>
+            Schedule interviews and manage offers from one dashboard
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:14px;color:var(--text-body)">
+            <span style="color:var(--gold);font-size:18px">✓</span>
+            Real-time recruitment analytics and workforce planning insights
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="#" class="btn btn-gold btn-lg">Post a Job Today</a>
+          <a href="#" class="btn btn-ghost btn-lg">View Pricing Plans</a>
+        </div>
+      </div>
+
+      <div class="employer-dashboard">
+        <div class="dashboard-header">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span class="dashboard-title">Employer Dashboard — Recruitment Overview</span>
+        </div>
+        <div class="dashboard-body">
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <div class="dash-stat-num" style="color:var(--gold)">47</div>
+              <div class="dash-stat-label">Total Applicants</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-stat-num" style="color:var(--success)">12</div>
+              <div class="dash-stat-label">Shortlisted</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-stat-num">3</div>
+              <div class="dash-stat-label">Active Jobs</div>
+            </div>
+          </div>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Role Applied</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color:var(--white)">Aminata K.</td>
+                <td style="color:var(--text-muted)">HR Business Partner</td>
+                <td><span class="status-pill pill-shortlisted">Shortlisted</span></td>
+              </tr>
+              <tr>
+                <td style="color:var(--white)">Mohamed S.</td>
+                <td style="color:var(--text-muted)">Talent Acquisition</td>
+                <td><span class="status-pill pill-review">Under Review</span></td>
+              </tr>
+              <tr>
+                <td style="color:var(--white)">Fatmata B.</td>
+                <td style="color:var(--text-muted)">Workforce Analyst</td>
+                <td><span class="status-pill pill-applied">Applied</span></td>
+              </tr>
+              <tr>
+                <td style="color:var(--white)">Joseph C.</td>
+                <td style="color:var(--text-muted)">L&D Officer</td>
+                <td><span class="status-pill pill-shortlisted">Shortlisted</span></td>
+              </tr>
+              <tr>
+                <td style="color:var(--white)">Isata M.</td>
+                <td style="color:var(--text-muted)">HR Business Partner</td>
+                <td><span class="status-pill pill-review">Under Review</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HR SERVICES -->
+<section id="services" style="background:var(--navy-mid);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">HR Services</div>
+      <h2 class="section-title">Beyond Recruitment — <strong>Complete HR Solutions</strong></h2>
+      <p class="section-desc">BULLOMNOH extends beyond job matching to provide comprehensive human resource management services for organisations at every stage of growth.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-tag">01 · Recruitment</span>
+        <h3>Managed Talent Acquisition</h3>
+        <p>Our HR specialists handle end-to-end recruitment mandates — from job profiling and candidate sourcing through psychometric assessment and offer management.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">02 · Development</span>
+        <h3>Learning & Development Advisory</h3>
+        <p>We design and facilitate capacity-building programmes, competency frameworks, and leadership development pathways for high-potential employees.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">03 · Compliance</span>
+        <h3>HR Policy & Labour Law Consulting</h3>
+        <p>Our consultants ensure your employment contracts, HR policies, and workplace practices comply fully with Sierra Leone's labour legislation and international standards.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">04 · Compensation</span>
+        <h3>Salary Benchmarking & C&B Design</h3>
+        <p>Develop competitive, equitable compensation structures using our market salary data, job evaluation frameworks, and total rewards consulting methodology.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">05 · Performance</span>
+        <h3>Performance Management Systems</h3>
+        <p>We implement KPI-based performance appraisal frameworks, 360-degree feedback systems, and succession planning processes tailored to your organisation.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">06 · HR Tech</span>
+        <h3>HRIS Implementation Support</h3>
+        <p>From selection to deployment, our HR technology consultants guide organisations through Human Resource Information System implementation and staff training.</p>
+        <a href="#" class="service-link">Learn More <span>→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-header" style="text-align:center;max-width:600px;margin:0 auto 64px;">
+      <div class="section-label" style="justify-content:center">Testimonials</div>
+      <h2 class="section-title">Trusted by <strong>Professionals</strong></h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"BULLOMNOH completely transformed how we approach talent acquisition. We filled three senior HR roles within a month — the quality of candidates on this platform is exceptional."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">DT</div>
+          <div>
+            <div class="t-name">Dr. David Turay</div>
+            <div class="t-role">Head of HR · Sierra Mineral Holdings</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"As a candidate, the dashboard made tracking my applications effortless. I landed my role as Talent Acquisition Specialist within three weeks of registering."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">AJ</div>
+          <div>
+            <div class="t-name">Abibatu Jalloh</div>
+            <div class="t-role">Talent Acquisition Specialist · Freetown</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The managed recruitment service exceeded every expectation. Their HR consultants brought real market intelligence and a genuine understanding of our workforce planning needs."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">PK</div>
+          <div>
+            <div class="t-name">Patricia Kamara</div>
+            <div class="t-role">CEO · Lumley Financial Services</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPLOYER CTA BANNER -->
+<div class="cta-banner">
+  <div>
+    <h2>Ready to find your <strong>ideal candidate?</strong></h2>
+    <p>Join 850+ employers who trust BULLOMNOH to power their recruitment strategy. Post your first vacancy today and reach thousands of qualified professionals across Sierra Leone.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn btn-gold btn-lg">Post a Job — Free Trial</a>
+    <a href="#" class="btn btn-ghost btn-lg">Request a Demo</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label">Get in Touch</div>
+        <h2 class="section-title">Let's Talk <strong>About Your</strong> HR Needs</h2>
+        <p class="section-desc">Whether you're an employer seeking talent, a professional exploring opportunities, or an organisation looking for HR advisory services, our team is ready to assist.</p>
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <h4>Our Office</h4>
+              <p>3 Tigie Drive, Lumley Regent Road<br>Freetown, Sierra Leone</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <h4>Contact Numbers</h4>
+              <a href="tel:+23231297087">+232 31 297 087</a><br>
+              <a href="tel:+23274146230">+232 74 146 230</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <h4>Email Us</h4>
+              <a href="mailto:info@bullomnoh.com">info@bullomnoh.com</a><br>
+              <a href="mailto:employers@bullomnoh.com">employers@bullomnoh.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3 style="font-size:26px;margin-bottom:8px;">Send Us a Message</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:32px;">We respond to all enquiries within 24 business hours.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="Your first name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Your last name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">I am a</label>
+          <select class="form-input">
+            <option>— Select one —</option>
+            <option>Job Seeker / Candidate</option>
+            <option>Employer / Hiring Manager</option>
+            <option>HR Professional</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Message</label>
+          <textarea class="form-input" placeholder="Tell us how we can help you…"></textarea>
+        </div>
+
+        <button class="btn btn-gold" style="width:100%;justify-content:center;padding:16px;font-size:15px;border-radius:var(--radius-sm)">
+          Send Message
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="margin-bottom:0">
+        <div class="logo-icon"></div>
+        <span class="logo-text">BULLOMNOH</span>
+      </a>
+      <p>Sierra Leone's premier Human Resource Management job board platform — connecting exceptional talent with organisations that are ready to grow. Grounded in Freetown, focused on West Africa.</p>
+      <div class="footer-contact-mini">
+        <a href="tel:+23231297087">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +232 31 297 087
+        </a>
+        <a href="tel:+23274146230">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +232 74 146 230
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>For Candidates</h4>
+      <div class="footer-links">
+        <a href="#">Browse Jobs</a>
+        <a href="#">Upload CV</a>
+        <a href="#">Career Resources</a>
+        <a href="#">Salary Guide</a>
+        <a href="#">Interview Tips</a>
+        <a href="#">Candidate Login</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>For Employers</h4>
+      <div class="footer-links">
+        <a href="#">Post a Job</a>
+        <a href="#">Search CVs</a>
+        <a href="#">Employer Dashboard</a>
+        <a href="#">Pricing Plans</a>
+        <a href="#">Managed Recruitment</a>
+        <a href="#">Employer Login</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">HR Services</a>
+        <a href="#">Blog & Resources</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 BULLOMNOH Human Resource Management. All rights reserved. · 3 Tigie Drive, Lumley Regent Road, Freetown, Sierra Leone</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // TAB FUNCTIONALITY
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // SMOOTH SCROLL NAV HIGHLIGHT
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === '#' + entry.target.id ? 'var(--gold)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // SCROLL REVEAL
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.job-card, .feature-card, .category-card, .testimonial-card, .service-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    revealObserver.observe(el);
+  });
+
+  // NAV SHRINK ON SCROLL
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 80) {
+      nav.style.height = '64px';
+      nav.style.borderBottomColor = 'rgba(28,52,85,0.8)';
+    } else {
+      nav.style.height = '80px';
+      nav.style.borderBottomColor = 'var(--navy-border)';
+    }
+  });
+</script>
+</body>
+</html>
